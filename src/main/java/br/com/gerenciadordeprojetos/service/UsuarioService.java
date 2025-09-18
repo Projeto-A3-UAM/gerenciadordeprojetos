@@ -53,13 +53,30 @@ public class UsuarioService {
     }
 
     private void salvarUsuarios() {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(arquivo))) {
+        System.out.println("[DEBUG] Iniciando salvamento de usuários...");
+        File dir = new File("dados");
+        if (!dir.exists()) {
+            boolean criado = dir.mkdirs();
+            System.out.println("[DEBUG] Diretório 'dados' criado: " + criado);
+        }
+        BufferedWriter bw = null;
+        try {
+            bw = new BufferedWriter(new FileWriter(arquivo));
             for (Usuario u : usuarios) {
                 bw.write(u.getNomeCompleto() + ";" + u.getCpf() + ";" + u.getEmail() + ";" + u.getCargo() + ";" + u.getLogin() + ";" + u.getSenha() + ";" + u.getPerfil());
                 bw.newLine();
             }
+            System.out.println("[DEBUG] Usuários salvos com sucesso em '" + arquivo + "'.");
         } catch (IOException e) {
-            System.out.println("Erro ao salvar usuários: " + e.getMessage());
+            System.out.println("[ERRO] Falha ao salvar usuários: " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            try {
+                if (bw != null) bw.close();
+            } catch (IOException ex) {
+                System.out.println("[ERRO] Falha ao fechar o BufferedWriter: " + ex.getMessage());
+                ex.printStackTrace();
+            }
         }
     }
 

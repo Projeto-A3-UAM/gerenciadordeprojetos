@@ -14,6 +14,46 @@ public class Main {
         sincronizarEntidades();
         int opcao;
         do {
+            System.out.println("\n===== Sistema de Gestão de Projetos =====");
+            System.out.println("1. Cadastrar Usuário");
+            System.out.println("2. Listar Usuários");
+            System.out.println("3. Cadastrar Projeto");
+            System.out.println("4. Listar Projetos");
+            System.out.println("5. Cadastrar Equipe");
+            System.out.println("6. Listar Equipes");
+            System.out.println("7. Vincular Equipe a Projeto");
+            System.out.println("8. Editar Usuário");
+            System.out.println("9. Editar Projeto");
+            System.out.println("10. Editar Equipe");
+            System.out.println("11. Excluir Usuário");
+            System.out.println("12. Excluir Projeto");
+            System.out.println("13. Excluir Equipe");
+            System.out.println("14. Relatório de Projetos");
+            System.out.println("0. Sair");
+            System.out.print("Escolha uma opção: ");
+            opcao = Integer.parseInt(scanner.nextLine());
+
+            switch (opcao) {
+                case 1 -> cadastrarUsuario();
+                case 2 -> listarUsuarios();
+                case 3 -> cadastrarProjeto();
+                case 4 -> listarProjetos();
+                case 5 -> cadastrarEquipe();
+                case 6 -> listarEquipes();
+                case 7 -> vincularEquipeProjeto();
+                case 8 -> editarUsuario();
+                case 9 -> editarProjeto();
+                case 10 -> editarEquipe();
+                case 11 -> excluirUsuario();
+                case 12 -> excluirProjeto();
+                case 13 -> excluirEquipe();
+                case 14 -> relatorioProjetos();
+                case 0 -> System.out.println("Saindo...");
+                default -> System.out.println("Opção inválida!");
+            }
+        } while (opcao != 0);
+    }
+
     // Sincroniza vínculos após carregar dados dos arquivos
     private static void sincronizarEntidades() {
         // Sincronizar membros das equipes
@@ -44,45 +84,6 @@ public class Main {
             }
         }
     }
-            System.out.println("\n===== Sistema de Gestão de Projetos =====");
-            System.out.println("1. Cadastrar Usuário");
-            System.out.println("2. Listar Usuários");
-            System.out.println("3. Cadastrar Projeto");
-            System.out.println("4. Listar Projetos");
-            System.out.println("5. Cadastrar Equipe");
-            System.out.println("6. Listar Equipes");
-                System.out.println("7. Vincular Equipe a Projeto");
-                System.out.println("8. Editar Usuário");
-                System.out.println("9. Editar Projeto");
-                System.out.println("10. Editar Equipe");
-                System.out.println("11. Excluir Usuário");
-                System.out.println("12. Excluir Projeto");
-                System.out.println("13. Excluir Equipe");
-                System.out.println("14. Relatório de Projetos");
-            System.out.println("0. Sair");
-            System.out.print("Escolha uma opção: ");
-            opcao = Integer.parseInt(scanner.nextLine());
-
-            switch (opcao) {
-                case 1 -> cadastrarUsuario();
-                case 2 -> listarUsuarios();
-                case 3 -> cadastrarProjeto();
-                case 4 -> listarProjetos();
-                case 5 -> cadastrarEquipe();
-                case 6 -> listarEquipes();
-                case 7 -> vincularEquipeProjeto();
-                case 8 -> editarUsuario();
-                case 9 -> editarProjeto();
-                case 10 -> editarEquipe();
-                case 11 -> excluirUsuario();
-                case 12 -> excluirProjeto();
-                case 13 -> excluirEquipe();
-                case 14 -> relatorioProjetos();
-                case 0 -> System.out.println("Saindo...");
-                default -> System.out.println("Opção inválida!");
-            }
-        } while (opcao != 0);
-    }
 
     private static void relatorioProjetos() {
         System.out.println("\n--- Relatório de Projetos ---");
@@ -105,6 +106,7 @@ public class Main {
     }
 
     private static void cadastrarUsuario() {
+        System.out.println("[DEBUG] Iniciando cadastro de usuário...");
         System.out.print("Nome completo: ");
         String nome = scanner.nextLine();
         System.out.print("CPF: ");
@@ -133,7 +135,9 @@ public class Main {
         usuario.setLogin(login);
         usuario.setSenha(senha);
         usuario.setPerfil(perfil);
+        System.out.println("[DEBUG] Chamando usuarioService.cadastrarUsuario...");
         usuarioService.cadastrarUsuario(usuario);
+        System.out.println("[DEBUG] Cadastro de usuário finalizado!");
         System.out.println("Usuário cadastrado com sucesso!");
     }
 
