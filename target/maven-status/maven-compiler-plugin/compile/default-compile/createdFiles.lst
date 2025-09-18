@@ -1,0 +1,9 @@
+br/com/gerenciadordeprojetos/domain/Equipe.class
+br/com/gerenciadordeprojetos/service/ProjetoService.class
+br/com/gerenciadordeprojetos/domain/Usuario.class
+br/com/gerenciadordeprojetos/domain/Projeto.class
+br/com/gerenciadordeprojetos/Main.class
+br/com/gerenciadordeprojetos/domain/Projeto$Status.class
+br/com/gerenciadordeprojetos/service/UsuarioService.class
+br/com/gerenciadordeprojetos/service/EquipeService.class
+br/com/gerenciadordeprojetos/domain/Usuario$Perfil.class

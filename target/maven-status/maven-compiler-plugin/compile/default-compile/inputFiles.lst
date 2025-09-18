@@ -1,0 +1,7 @@
+/workspaces/gerenciadordeprojetos/src/main/java/br/com/gerenciadordeprojetos/Main.java
+/workspaces/gerenciadordeprojetos/src/main/java/br/com/gerenciadordeprojetos/domain/Equipe.java
+/workspaces/gerenciadordeprojetos/src/main/java/br/com/gerenciadordeprojetos/domain/Projeto.java
+/workspaces/gerenciadordeprojetos/src/main/java/br/com/gerenciadordeprojetos/domain/Usuario.java
+/workspaces/gerenciadordeprojetos/src/main/java/br/com/gerenciadordeprojetos/service/EquipeService.java
+/workspaces/gerenciadordeprojetos/src/main/java/br/com/gerenciadordeprojetos/service/ProjetoService.java
+/workspaces/gerenciadordeprojetos/src/main/java/br/com/gerenciadordeprojetos/service/UsuarioService.java
