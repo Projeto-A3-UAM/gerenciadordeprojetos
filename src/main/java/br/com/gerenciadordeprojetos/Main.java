@@ -34,22 +34,54 @@ public class Main {
             opcao = Integer.parseInt(scanner.nextLine());
 
             switch (opcao) {
-                case 1 -> cadastrarUsuario();
-                case 2 -> listarUsuarios();
-                case 3 -> cadastrarProjeto();
-                case 4 -> listarProjetos();
-                case 5 -> cadastrarEquipe();
-                case 6 -> listarEquipes();
-                case 7 -> vincularEquipeProjeto();
-                case 8 -> editarUsuario();
-                case 9 -> editarProjeto();
-                case 10 -> editarEquipe();
-                case 11 -> excluirUsuario();
-                case 12 -> excluirProjeto();
-                case 13 -> excluirEquipe();
-                case 14 -> relatorioProjetos();
-                case 0 -> System.out.println("Saindo...");
-                default -> System.out.println("Opção inválida!");
+                case 1:
+                    cadastrarUsuario();
+                    break;
+                case 2:
+                    listarUsuarios();
+                    break;
+                case 3:
+                    cadastrarProjeto();
+                    break;
+                case 4:
+                    listarProjetos();
+                    break;
+                case 5:
+                    cadastrarEquipe();
+                    break;
+                case 6:
+                    listarEquipes();
+                    break;
+                case 7:
+                    vincularEquipeProjeto();
+                    break;
+                case 8:
+                    editarUsuario();
+                    break;
+                case 9:
+                    editarProjeto();
+                    break;
+                case 10:
+                    editarEquipe();
+                    break;
+                case 11:
+                    excluirUsuario();
+                    break;
+                case 12:
+                    excluirProjeto();
+                    break;
+                case 13:
+                    excluirEquipe();
+                    break;
+                case 14:
+                    relatorioProjetos();
+                    break;
+                case 0:
+                    System.out.println("Saindo...");
+                    break;
+                default:
+                    System.out.println("Opção inválida!");
+                    break;
             }
         } while (opcao != 0);
     }
@@ -121,12 +153,21 @@ public class Main {
         String senha = scanner.nextLine();
         System.out.print("Perfil (1-ADMINISTRADOR, 2-GERENTE, 3-COLABORADOR): ");
         int perfilOpcao = Integer.parseInt(scanner.nextLine());
-        Usuario.Perfil perfil = switch (perfilOpcao) {
-            case 1 -> Usuario.Perfil.ADMINISTRADOR;
-            case 2 -> Usuario.Perfil.GERENTE;
-            case 3 -> Usuario.Perfil.COLABORADOR;
-            default -> Usuario.Perfil.COLABORADOR;
-        };
+        Usuario.Perfil perfil;
+        switch (perfilOpcao) {
+            case 1:
+                perfil = Usuario.Perfil.ADMINISTRADOR;
+                break;
+            case 2:
+                perfil = Usuario.Perfil.GERENTE;
+                break;
+            case 3:
+                perfil = Usuario.Perfil.COLABORADOR;
+                break;
+            default:
+                perfil = Usuario.Perfil.COLABORADOR;
+                break;
+        }
         Usuario usuario = new Usuario();
         usuario.setNomeCompleto(nome);
         usuario.setCpf(cpf);
@@ -159,13 +200,24 @@ public class Main {
         String dataTermino = scanner.nextLine();
         System.out.print("Status (1-PLANEJADO, 2-EM_ANDAMENTO, 3-CONCLUIDO, 4-CANCELADO): ");
         int statusOpcao = Integer.parseInt(scanner.nextLine());
-        Projeto.Status status = switch (statusOpcao) {
-            case 1 -> Projeto.Status.PLANEJADO;
-            case 2 -> Projeto.Status.EM_ANDAMENTO;
-            case 3 -> Projeto.Status.CONCLUIDO;
-            case 4 -> Projeto.Status.CANCELADO;
-            default -> Projeto.Status.PLANEJADO;
-        };
+        Projeto.Status status;
+        switch (statusOpcao) {
+            case 1:
+                status = Projeto.Status.PLANEJADO;
+                break;
+            case 2:
+                status = Projeto.Status.EM_ANDAMENTO;
+                break;
+            case 3:
+                status = Projeto.Status.CONCLUIDO;
+                break;
+            case 4:
+                status = Projeto.Status.CANCELADO;
+                break;
+            default:
+                status = Projeto.Status.PLANEJADO;
+                break;
+        }
         System.out.print("Login do gerente responsável: ");
         String loginGerente = scanner.nextLine();
         Usuario gerente = usuarioService.buscarPorLogin(loginGerente);
@@ -253,12 +305,21 @@ public class Main {
             String senha = scanner.nextLine();
             System.out.print("Novo perfil (1-ADMINISTRADOR, 2-GERENTE, 3-COLABORADOR): ");
             int perfilOpcao = Integer.parseInt(scanner.nextLine());
-            Usuario.Perfil perfil = switch (perfilOpcao) {
-                case 1 -> Usuario.Perfil.ADMINISTRADOR;
-                case 2 -> Usuario.Perfil.GERENTE;
-                case 3 -> Usuario.Perfil.COLABORADOR;
-                default -> Usuario.Perfil.COLABORADOR;
-            };
+            Usuario.Perfil perfil;
+            switch (perfilOpcao) {
+                case 1:
+                    perfil = Usuario.Perfil.ADMINISTRADOR;
+                    break;
+                case 2:
+                    perfil = Usuario.Perfil.GERENTE;
+                    break;
+                case 3:
+                    perfil = Usuario.Perfil.COLABORADOR;
+                    break;
+                default:
+                    perfil = Usuario.Perfil.COLABORADOR;
+                    break;
+            }
             Usuario novoUsuario = new Usuario();
             novoUsuario.setNomeCompleto(nome);
             novoUsuario.setCpf(cpf);
@@ -290,13 +351,24 @@ public class Main {
             String dataTermino = scanner.nextLine();
             System.out.print("Novo status (1-PLANEJADO, 2-EM_ANDAMENTO, 3-CONCLUIDO, 4-CANCELADO): ");
             int statusOpcao = Integer.parseInt(scanner.nextLine());
-            Projeto.Status status = switch (statusOpcao) {
-                case 1 -> Projeto.Status.PLANEJADO;
-                case 2 -> Projeto.Status.EM_ANDAMENTO;
-                case 3 -> Projeto.Status.CONCLUIDO;
-                case 4 -> Projeto.Status.CANCELADO;
-                default -> Projeto.Status.PLANEJADO;
-            };
+            Projeto.Status status;
+            switch (statusOpcao) {
+                case 1:
+                    status = Projeto.Status.PLANEJADO;
+                    break;
+                case 2:
+                    status = Projeto.Status.EM_ANDAMENTO;
+                    break;
+                case 3:
+                    status = Projeto.Status.CONCLUIDO;
+                    break;
+                case 4:
+                    status = Projeto.Status.CANCELADO;
+                    break;
+                default:
+                    status = Projeto.Status.PLANEJADO;
+                    break;
+            }
             System.out.print("Login do novo gerente responsável: ");
             String loginGerente = scanner.nextLine();
             Usuario gerente = usuarioService.buscarPorLogin(loginGerente);

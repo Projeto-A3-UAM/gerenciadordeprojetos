@@ -1,1 +1,2 @@
-Maria Lurdes;12345678910;maria@teste;Gerente;Maria123;123;GERENTE
+João Silva;12345678900;joao@email.com;Desenvolvedor;joaosilva;senha123;ADMINISTRADOR
+Maria Souza;98765432100;maria@email.com;Gerente;mariasouza;senha456;GERENTE
