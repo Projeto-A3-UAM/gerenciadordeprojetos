@@ -1,13 +1,14 @@
 package br.com.gerenciadordeprojetos.service;
 
 import br.com.gerenciadordeprojetos.domain.Usuario;
-import java.util.ArrayList;
-import java.util.List;
+
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class UsuarioService {
-    private List<Usuario> usuarios = new ArrayList<>();
-
+    private final List<Usuario> usuarios = Collections.synchronizedList(new ArrayList<>());
     private final String arquivo = "dados/usuarios.txt";
 
     public UsuarioService() {
@@ -20,12 +21,13 @@ public class UsuarioService {
     }
 
     public List<Usuario> listarUsuarios() {
-        return usuarios;
+        return new ArrayList<>(usuarios); // cópia defensiva
     }
 
     public Usuario buscarPorLogin(String login) {
+        if (login == null) return null;
         for (Usuario u : usuarios) {
-            if (u.getLogin().equals(login)) {
+            if (u.getLogin() != null && login.equalsIgnoreCase(u.getLogin())) {
                 return u;
             }
         }
@@ -33,7 +35,8 @@ public class UsuarioService {
     }
 
     public void removerUsuario(String login) {
-        usuarios.removeIf(u -> u.getLogin().equals(login));
+        if (login == null) return;
+        usuarios.removeIf(u -> u.getLogin() != null && login.equalsIgnoreCase(u.getLogin()));
         salvarUsuarios();
     }
 
@@ -44,7 +47,7 @@ public class UsuarioService {
             usuario.setCpf(novoUsuario.getCpf());
             usuario.setEmail(novoUsuario.getEmail());
             usuario.setCargo(novoUsuario.getCargo());
-            usuario.setSenha(novoUsuario.getSenha());
+            usuario.setSenha(novoUsuario.getSenha()); // ⚠️ considerar hash
             usuario.setPerfil(novoUsuario.getPerfil());
             salvarUsuarios();
             return true;
@@ -59,34 +62,36 @@ public class UsuarioService {
             boolean criado = dir.mkdirs();
             System.out.println("[DEBUG] Diretório 'dados' criado: " + criado);
         }
-        BufferedWriter bw = null;
-        try {
-            bw = new BufferedWriter(new FileWriter(arquivo));
+
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(arquivo))) {
             for (Usuario u : usuarios) {
-                bw.write(u.getNomeCompleto() + ";" + u.getCpf() + ";" + u.getEmail() + ";" + u.getCargo() + ";" + u.getLogin() + ";" + u.getSenha() + ";" + u.getPerfil());
+                bw.write(
+                    (u.getNomeCompleto() != null ? u.getNomeCompleto() : "") + ";" +
+                    (u.getCpf() != null ? u.getCpf() : "") + ";" +
+                    (u.getEmail() != null ? u.getEmail() : "") + ";" +
+                    (u.getCargo() != null ? u.getCargo() : "") + ";" +
+                    (u.getLogin() != null ? u.getLogin() : "") + ";" +
+                    (u.getSenha() != null ? u.getSenha() : "") + ";" +
+                    (u.getPerfil() != null ? u.getPerfil().name() : "")
+                );
                 bw.newLine();
             }
             System.out.println("[DEBUG] Usuários salvos com sucesso em '" + arquivo + "'.");
         } catch (IOException e) {
-            System.out.println("[ERRO] Falha ao salvar usuários: " + e.getMessage());
+            System.err.println("[ERRO] Falha ao salvar usuários: " + e.getMessage());
             e.printStackTrace();
-        } finally {
-            try {
-                if (bw != null) bw.close();
-            } catch (IOException ex) {
-                System.out.println("[ERRO] Falha ao fechar o BufferedWriter: " + ex.getMessage());
-                ex.printStackTrace();
-            }
         }
     }
 
     private void carregarUsuarios() {
+        usuarios.clear();
         File file = new File(arquivo);
         if (!file.exists()) return;
+
         try (BufferedReader br = new BufferedReader(new FileReader(arquivo))) {
             String linha;
             while ((linha = br.readLine()) != null) {
-                String[] dados = linha.split(";");
+                String[] dados = linha.split(";", -1); // mantém campos vazios
                 if (dados.length == 7) {
                     Usuario u = new Usuario();
                     u.setNomeCompleto(dados[0]);
@@ -95,12 +100,20 @@ public class UsuarioService {
                     u.setCargo(dados[3]);
                     u.setLogin(dados[4]);
                     u.setSenha(dados[5]);
-                    u.setPerfil(Usuario.Perfil.valueOf(dados[6]));
+
+                    try {
+                        if (!dados[6].isEmpty()) {
+                            u.setPerfil(Usuario.Perfil.valueOf(dados[6]));
+                        }
+                    } catch (IllegalArgumentException ex) {
+                        System.err.println("[ERRO] Perfil inválido no arquivo: " + dados[6]);
+                    }
+
                     usuarios.add(u);
                 }
             }
         } catch (IOException e) {
-            System.out.println("Erro ao carregar usuários: " + e.getMessage());
+            System.err.println("Erro ao carregar usuários: " + e.getMessage());
         }
     }
 }

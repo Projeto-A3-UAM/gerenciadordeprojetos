@@ -1,12 +1,15 @@
 package br.com.gerenciadordeprojetos.service;
 
 import br.com.gerenciadordeprojetos.domain.Equipe;
-import java.util.ArrayList;
-import java.util.List;
+import br.com.gerenciadordeprojetos.domain.Usuario;
+
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class EquipeService {
-    private List<Equipe> equipes = new ArrayList<>();
+    private final List<Equipe> equipes = Collections.synchronizedList(new ArrayList<>());
     private final String arquivo = "dados/equipes.txt";
 
     public EquipeService() {
@@ -19,12 +22,13 @@ public class EquipeService {
     }
 
     public List<Equipe> listarEquipes() {
-        return equipes;
+        return new ArrayList<>(equipes); // cópia defensiva
     }
 
     public Equipe buscarPorNome(String nome) {
+        if (nome == null) return null;
         for (Equipe e : equipes) {
-            if (e.getNome().equals(nome)) {
+            if (e.getNome() != null && nome.equalsIgnoreCase(e.getNome())) {
                 return e;
             }
         }
@@ -32,7 +36,8 @@ public class EquipeService {
     }
 
     public void removerEquipe(String nome) {
-        equipes.removeIf(e -> e.getNome().equals(nome));
+        if (nome == null) return;
+        equipes.removeIf(e -> e.getNome() != null && nome.equalsIgnoreCase(e.getNome()));
         salvarEquipes();
     }
 
@@ -48,39 +53,46 @@ public class EquipeService {
     }
 
     private void salvarEquipes() {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(arquivo))) {
-            for (Equipe e : equipes) {
-                String membrosStr = "";
-                if (e.getMembros() != null && !e.getMembros().isEmpty()) {
-                    for (br.com.gerenciadordeprojetos.domain.Usuario u : e.getMembros()) {
-                        membrosStr += u.getLogin() + ",";
+        try {
+            new File("dados").mkdirs(); // garante diretório
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(arquivo))) {
+                for (Equipe e : equipes) {
+                    StringBuilder membrosStr = new StringBuilder();
+                    if (e.getMembros() != null && !e.getMembros().isEmpty()) {
+                        for (Usuario u : e.getMembros()) {
+                            membrosStr.append(u.getLogin()).append(",");
+                        }
+                        if (membrosStr.length() > 0) {
+                            membrosStr.setLength(membrosStr.length() - 1); // remove última vírgula
+                        }
                     }
-                    if (!membrosStr.isEmpty()) membrosStr = membrosStr.substring(0, membrosStr.length()-1);
+                    bw.write(e.getNome() + ";" + e.getDescricao() + ";" + membrosStr);
+                    bw.newLine();
                 }
-                bw.write(e.getNome() + ";" + e.getDescricao() + ";" + membrosStr);
-                bw.newLine();
             }
         } catch (IOException ex) {
-            System.out.println("Erro ao salvar equipes: " + ex.getMessage());
+            System.err.println("Erro ao salvar equipes: " + ex.getMessage());
         }
     }
 
     private void carregarEquipes() {
+        equipes.clear();
         File file = new File(arquivo);
         if (!file.exists()) return;
-        try (BufferedReader br = new BufferedReader(new FileReader(arquivo))) {
+
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String linha;
             while ((linha = br.readLine()) != null) {
-                String[] dados = linha.split(";");
+                String[] dados = linha.split(";", -1); // mantém campos vazios
                 if (dados.length >= 3) {
                     Equipe e = new Equipe();
                     e.setNome(dados[0]);
                     e.setDescricao(dados[1]);
-                    List<br.com.gerenciadordeprojetos.domain.Usuario> membros = new ArrayList<>();
+                    List<Usuario> membros = new ArrayList<>();
                     if (!dados[2].isEmpty()) {
                         String[] logins = dados[2].split(",");
                         for (String login : logins) {
-                            br.com.gerenciadordeprojetos.domain.Usuario u = new br.com.gerenciadordeprojetos.domain.Usuario();
+                            Usuario u = new Usuario();
                             u.setLogin(login);
                             membros.add(u);
                         }
@@ -90,7 +102,7 @@ public class EquipeService {
                 }
             }
         } catch (IOException ex) {
-            System.out.println("Erro ao carregar equipes: " + ex.getMessage());
+            System.err.println("Erro ao carregar equipes: " + ex.getMessage());
         }
     }
 }
