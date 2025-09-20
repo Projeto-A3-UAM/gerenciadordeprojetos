@@ -1,1 +1,9 @@
 Viver;Reciclagem;2025-09-10;2025-10-11;EM_ANDAMENTO;mariasouza;Turquesa
+Lilas;Meio Ambiente;;;;;
+Laranja;Saude ;;;;;
+Blue;Conscientização sobre o uso de agua;;;PLANEJADO;;
+BLACK ;APOIO aos jovens em vulnerabilidade;;;PLANEJADO;;
+SETEMBRO AMARELO;Conscientização ;;;PLANEJADO;;Action
+Picole;Distribuição gratuita;2025-09-20;2025-10-31;CANCELADO;;RELOGIO,RELOGIO,RELOGIO
+CEU;TESTE;2025-09-20;;PLANEJADO;carol;RELOGIO
+MOVER;ATIVIDADE FISICA;2025-09-20;2025-10-31;CONCLUIDO;BRUNO;CARAMELO

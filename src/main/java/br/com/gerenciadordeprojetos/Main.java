@@ -34,7 +34,7 @@ public class Main {
                 System.out.print("Escolha uma opção: ");
             }
             opcao = scanner.nextInt();
-            scanner.nextLine();
+            scanner.nextLine(); // Limpa o buffer após nextInt()
             switch (opcao) {
                 case 1:
                     cadastrarUsuario();
@@ -181,9 +181,44 @@ public class Main {
         String nome = scanner.nextLine();
         System.out.print("Descrição: ");
         String descricao = scanner.nextLine();
+        System.out.print("Data de início (AAAA-MM-DD): ");
+        String dataInicioStr = scanner.nextLine();
+        System.out.print("Data de término prevista (AAAA-MM-DD): ");
+        String dataTerminoStr = scanner.nextLine();
+        System.out.print("Status (PLANEJADO, EM_ANDAMENTO, CONCLUIDO, CANCELADO): ");
+        String statusStr = scanner.nextLine();
+        System.out.print("Login do gerente do projeto: ");
+        String gerenteLogin = scanner.nextLine();
+        Projeto.Status status;
+        java.time.LocalDate dataInicio = null;
+        java.time.LocalDate dataTermino = null;
+        try {
+            if (!dataInicioStr.isEmpty()) dataInicio = java.time.LocalDate.parse(dataInicioStr);
+        } catch (Exception e) {
+            System.out.println("Data de início inválida! Deixando em branco.");
+        }
+        try {
+            if (!dataTerminoStr.isEmpty()) dataTermino = java.time.LocalDate.parse(dataTerminoStr);
+        } catch (Exception e) {
+            System.out.println("Data de término inválida! Deixando em branco.");
+        }
+        try {
+            status = Projeto.Status.valueOf(statusStr.toUpperCase());
+        } catch (Exception e) {
+            System.out.println("Status inválido! Usando PLANEJADO como padrão.");
+            status = Projeto.Status.PLANEJADO;
+        }
+        Usuario gerente = usuarioService.buscarPorLogin(gerenteLogin);
+        if (gerente == null) {
+            System.out.println("Gerente não encontrado! O projeto será cadastrado sem gerente.");
+        }
         Projeto projeto = new Projeto();
         projeto.setNome(nome);
         projeto.setDescricao(descricao);
+        projeto.setDataInicio(dataInicio);
+        projeto.setDataTerminoPrevista(dataTermino);
+        projeto.setStatus(status);
+        projeto.setGerente(gerente);
         projetoService.cadastrarProjeto(projeto);
         System.out.println("Projeto cadastrado com sucesso!");
     }
@@ -191,17 +226,20 @@ public class Main {
     private static void listarProjetos() {
         System.out.println("\n--- Projetos ---");
         for (Projeto p : projetoService.listarProjetos()) {
-            System.out.println("Nome: " + p.getNome() + ", Descrição: " + p.getDescricao());
+            System.out.println("Nome: " + p.getNome() + ", Descrição: " + p.getDescricao() + ", Status: " + (p.getStatus() != null ? p.getStatus() : "N/A"));
         }
     }
 
     private static void cadastrarEquipe() {
-        System.out.print("Nome da equipe: ");
-        String nome = scanner.nextLine();
-        Equipe equipe = new Equipe();
-        equipe.setNome(nome);
-        equipeService.cadastrarEquipe(equipe);
-        System.out.println("Equipe cadastrada com sucesso!");
+    System.out.print("Nome da equipe: ");
+    String nome = scanner.nextLine();
+    System.out.print("Descrição da equipe: ");
+    String descricao = scanner.nextLine();
+    Equipe equipe = new Equipe();
+    equipe.setNome(nome);
+    equipe.setDescricao(descricao);
+    equipeService.cadastrarEquipe(equipe);
+    System.out.println("Equipe cadastrada com sucesso!");
     }
 
     private static void listarEquipes() {

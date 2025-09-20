@@ -2,3 +2,6 @@ João Silva;12345678900;joao@email.com;Desenvolvedor;joaosilva;senha123;ADMINIST
 Maria Souza;98765432100;maria@email.com;Gerente;mariasouza;senha456;GERENTE
 Maria;123456789;m@teste;Gerente;maria123;123456;COLABORADOR
 Maria;123456789;m@;Vendedora;mm;123;COLABORADOR
+Mel Moreno;123456789090;mel@gmail.com;Assistente;mel;1234;GERENTE
+Carol Costa ;12345677;carol@gmail.com;Vendedora;carol;1234;GERENTE
+BRUNO;123456789;BRUNO@GMAIL.COM;VENDEDOR;BRUNO;2222;GERENTE

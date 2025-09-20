@@ -112,6 +112,8 @@ public class ProjetoService {
 
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String linha;
+            // Instanciar UsuarioService para buscar gerente completo
+            br.com.gerenciadordeprojetos.service.UsuarioService usuarioService = new br.com.gerenciadordeprojetos.service.UsuarioService();
             while ((linha = br.readLine()) != null) {
                 String[] dados = linha.split(";", -1); // mantém campos vazios
                 if (dados.length >= 7) {
@@ -135,11 +137,17 @@ public class ProjetoService {
                         catch (IllegalArgumentException ex) { System.err.println("Status inválido: " + dados[4]); }
                     }
 
-                    // Gerente apenas login (usuário real deve ser vinculado depois)
+                    // Gerente: buscar usuário completo pelo login
                     if (!dados[5].isEmpty()) {
-                        Usuario gerente = new Usuario();
-                        gerente.setLogin(dados[5]);
-                        p.setGerente(gerente);
+                        Usuario gerente = usuarioService.buscarPorLogin(dados[5]);
+                        if (gerente != null) {
+                            p.setGerente(gerente);
+                        } else {
+                            // fallback: cria só com login
+                            Usuario g = new Usuario();
+                            g.setLogin(dados[5]);
+                            p.setGerente(g);
+                        }
                     }
 
                     // Equipes apenas com nome

@@ -1,1 +1,7 @@
 Turquesa;Marketing;
+Yellow;Abertura;
+PINK ;Elaboração do Projeto ;
+Blue ;Implantação de melhorias ;
+Action;Executar o projeto ;
+RELOGIO;TEMPO;
+CARAMELO;TESTES DE PROJETOS;
